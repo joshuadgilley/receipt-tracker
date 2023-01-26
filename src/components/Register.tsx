@@ -7,16 +7,16 @@ declare var process : {
     }
 }
 
+const checkPasswords = (password: string, password2: string) => {
+    return password === password2;
+}
+
 export default function Register() {
     const [email, setEmail] = useState("");
     const [password, setPassword1] = useState("");
     const [password2, setPassword2] = useState("");
     const [terms, setTerms] = useState(false);
     const [buttonText, setButtonText] = useState("Send Message");
-
-    const checkPasswords = () => {
-        return password === password2;
-    }
 
     const resetForm = () => {
         setEmail("");
@@ -35,11 +35,9 @@ export default function Register() {
         setButtonText("...sending");
         setTimeout(async () => {
           try {
-            if (!checkPasswords()) throw Error;
+            if (!checkPasswords(password, password2)) throw Error;
             setButtonText("Sent!")
-            // send payload to api /newuser
             await axios.post(process.env.REACT_APP_API_CREATE_USER, payload)
-            //await axios.post("https://uetrt5suud.execute-api.us-east-1.amazonaws.com/test/adduser", payload);
             resetForm();
           } catch (error) {
             console.log(error);
