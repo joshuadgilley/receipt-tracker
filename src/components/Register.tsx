@@ -38,6 +38,7 @@ export default function Register() {
             if (!checkPasswords()) throw Error;
             setButtonText("Sent!")
             // send payload to api /newuser
+            // rebuild
             await axios.post(process.env.API_CREATE_USER, payload)
             resetForm();
           } catch (error) {
