@@ -60,7 +60,6 @@ export default function Login({handleSuccess}: CardProps) {
         setTimeout(async () => {
           try {
             const resId = await axios.post(process.env.REACT_APP_API_LOGIN_USER, payload)
-            console.log(resId);
             handlePopUp(resId);
             resetForm();
           } catch (error) {
