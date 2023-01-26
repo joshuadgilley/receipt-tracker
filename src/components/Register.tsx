@@ -1,14 +1,15 @@
 import {useState} from 'react';
+import axios from 'axios';
 
 export default function Register() {
     const [email, setEmail] = useState("");
-    const [password1, setPassword1] = useState("");
+    const [password, setPassword1] = useState("");
     const [password2, setPassword2] = useState("");
     const [terms, setTerms] = useState(false);
     const [buttonText, setButtonText] = useState("Send Message");
 
     const checkPasswords = () => {
-        return password1 === password2;
+        return password === password2;
     }
 
     const resetForm = () => {
@@ -24,15 +25,14 @@ export default function Register() {
 
     const formSubmit = async (e: any) => {
         e.preventDefault();
-        const payload = { email, password1, password2, terms};
-        console.log()
+        const payload = { email, password};
         setButtonText("...sending");
-        setTimeout(() => {
+        setTimeout(async () => {
           try {
             if (!checkPasswords()) throw Error;
             setButtonText("Sent!")
-            console.log(payload)
             // send payload to api /newuser
+            await axios.post("https://uetrt5suud.execute-api.us-east-1.amazonaws.com/test/adduser", payload)
             resetForm();
           } catch (error) {
             console.log(error);
