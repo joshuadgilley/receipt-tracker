@@ -43,7 +43,7 @@ export default function PricingPage() {
                         <p className="font-light text-gray-500 sm:text-lg dark:text-gray-400">Relevant for multiple users, extended & premium support.</p>
                         <div className="flex justify-center items-baseline my-8">
                             <span className="mr-2 text-5xl font-extrabold">$99</span>
-                            <span className="text-gray-500 dark:text-gray-400" dark:text-gray-400>/month</span>
+                            <span className="text-gray-500 dark:text-gray-400 dark:text-gray-400">/month</span>
                         </div>
                         <ul role="list" className="mb-8 space-y-4 text-left">
                             <li className="flex items-center space-x-3">
