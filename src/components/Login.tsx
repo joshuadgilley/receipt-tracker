@@ -9,7 +9,11 @@ declare var process : {
     }
 }
 
-export default function Login() {
+type CardProps = {
+    handleSuccess: any
+}
+
+export default function Login({handleSuccess}: CardProps) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [buttonText, setButtonText] = useState("Login");
@@ -29,6 +33,7 @@ export default function Login() {
         setSuccess(true);
         setTimeout(() => {
             setSuccess(false)
+            handleSuccess(true);
           }, 3000);
     }
 
@@ -39,25 +44,27 @@ export default function Login() {
           }, 3000);
     }
 
+    const handlePopUp = ({data}: {data: string}) => {
+        setButtonText("Logging in..")
+        if (data === "") {
+            throwError();
+        } else {
+            throwSuccess();
+        }
+    }
+
     const formSubmit = async (e: any) => {
         e.preventDefault();
         const payload = { email, password };
         setButtonText("...sending");
         setTimeout(async () => {
           try {
-            setButtonText("Logging in..")
-            // send payload to api /login
             const resId = await axios.post(process.env.REACT_APP_API_LOGIN_USER, payload)
-            if (resId.data === "") {
-                throwError();
-            } else {
-                throwSuccess();
-            }
+            handlePopUp(resId);
             resetForm();
           } catch (error) {
-            console.log(error);
-            setButtonText("There was an error...")
             throwError();
+            resetForm();
           }
         }, 3000);
     };
@@ -81,7 +88,7 @@ export default function Login() {
                 </div>
                 <div className="xl:ml-20 xl:w-5/12 lg:w-5/12 md:w-8/12 mb-12 md:mb-0">
                     <form onSubmit={(e) => formSubmit(e)}>
-                        <h1 className="text-4xl mb-5">PDF Tracker</h1>
+                        <h1 className="text-4xl mb-5">Receipt Tracker</h1>
                         <div className="flex flex-row items-center justify-center lg:justify-start">
                             <p className="text-lg mb-0 mr-4">Sign in with</p>
                             <button
