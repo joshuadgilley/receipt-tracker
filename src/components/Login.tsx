@@ -29,7 +29,6 @@ export default function Login() {
         setTimeout(async () => {
           try {
             setButtonText("Logging in..")
-            console.log(payload)
             // send payload to api /login
             const resId = await axios.post(process.env.REACT_APP_API_LOGIN_USER, payload)
             console.log(resId);
