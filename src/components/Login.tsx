@@ -1,4 +1,11 @@
 import { useState } from 'react';
+import axios from 'axios';
+
+declare var process : {
+    env: {
+        REACT_APP_API_LOGIN_USER: string
+    }
+}
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -19,11 +26,13 @@ export default function Login() {
         e.preventDefault();
         const payload = { email, password };
         setButtonText("...sending");
-        setTimeout(() => {
+        setTimeout(async () => {
           try {
             setButtonText("Logging in..")
             console.log(payload)
             // send payload to api /login
+            const resId = await axios.post(process.env.REACT_APP_API_LOGIN_USER, payload)
+            console.log(resId);
             resetForm();
           } catch (error) {
             console.log(error);
