@@ -38,8 +38,8 @@ export default function Register() {
             if (!checkPasswords()) throw Error;
             setButtonText("Sent!")
             // send payload to api /newuser
-            // rebuild
-            await axios.post(process.env.API_CREATE_USER, payload)
+            // await axios.post(process.env.API_CREATE_USER, payload)
+            await axios.post("https://uetrt5suud.execute-api.us-east-1.amazonaws.com/test/adduser", payload);
             resetForm();
           } catch (error) {
             console.log(error);
