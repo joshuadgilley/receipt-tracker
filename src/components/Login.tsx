@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
+import Success from './status/Success';
+import Error from './status/Error';
 
 declare var process : {
     env: {
@@ -11,6 +13,8 @@ export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [buttonText, setButtonText] = useState("Login");
+    const [success, setSuccess] = useState(false);
+    const [error, setError] = useState(false);
 
     const resetForm = () => {
         setEmail("");
@@ -21,6 +25,19 @@ export default function Login() {
         }, 3000);
     };
 
+    const throwSuccess = () => {
+        setSuccess(true);
+        setTimeout(() => {
+            setSuccess(false)
+          }, 3000);
+    }
+
+    const throwError = () => {
+        setError(true);
+        setTimeout(() => {
+            setError(false)
+          }, 3000);
+    }
 
     const formSubmit = async (e: any) => {
         e.preventDefault();
@@ -31,17 +48,24 @@ export default function Login() {
             setButtonText("Logging in..")
             // send payload to api /login
             const resId = await axios.post(process.env.REACT_APP_API_LOGIN_USER, payload)
-            console.log(resId);
+            if (resId.data === "") {
+                throwError();
+            } else {
+                throwSuccess();
+            }
             resetForm();
           } catch (error) {
             console.log(error);
             setButtonText("There was an error...")
+            throwError();
           }
         }, 3000);
     };
 
     return (
         <section className="h-screen">
+            {success ? <Success title={"Login Successful"} secondary={"Welcome to Receipt Tracker.."}/> : ""}
+            {error ? <Error title={"Login Unsuccessful"} secondary={"Please try another email or password.."}/> : ""}
             <div className="px-6 h-full text-gray-800">
                 <div
                 className="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full g-6"
