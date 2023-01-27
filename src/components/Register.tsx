@@ -6,6 +6,7 @@ import ErrorMessage from "./status/ErrorMessage";
 declare var process: {
   env: {
     REACT_APP_API_CREATE_USER: string;
+    REACT_APP_API_AUTH_EMAIL: string;
   };
 };
 
@@ -15,10 +16,7 @@ const checkPasswords = (password: string, password2: string) => {
 
 const emailAlreadyExists = async (email: string) => {
   const payload = { email };
-  const res = await axios.post(
-    "https://uetrt5suud.execute-api.us-east-1.amazonaws.com/test/authentication",
-    payload
-  );
+  const res = await axios.post(process.env.REACT_APP_API_AUTH_EMAIL, payload);
   return res.data.length > 0;
 };
 
