@@ -17,6 +17,7 @@ const checkPasswords = (password: string, password2: string) => {
 const emailAlreadyExists = async (email: string) => {
   const payload = { email };
   const res = await axios.post(process.env.REACT_APP_API_AUTH_EMAIL, payload);
+  console.log(res);
   return res.data.length > 0;
 };
 
@@ -61,8 +62,9 @@ export default function Register() {
     setTimeout(async () => {
       try {
         if (!checkPasswords(password, password2)) throw Error;
-        if (await emailAlreadyExists(email))
+        if (await emailAlreadyExists(email)) {
           throw new Error("That email already exists..");
+        }
         setButtonText("Sent!");
         await axios.post(process.env.REACT_APP_API_CREATE_USER, payload);
         throwSuccess();
