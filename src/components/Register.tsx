@@ -17,7 +17,6 @@ const checkPasswords = (password: string, password2: string) => {
 const emailAlreadyExists = async (email: string) => {
   const payload = { email };
   const res = await axios.post(process.env.REACT_APP_API_AUTH_EMAIL, payload);
-  console.log(res);
   return res.data.length > 0;
 };
 
