@@ -102,8 +102,6 @@ export default function Register() {
         await axios.post(process.env.REACT_APP_API_CREATE_USER, payload);
         handleSuccessOrError("Sent", true, mainMessage, secondaryMessage);
       } catch (error) {
-        console.log(error);
-        console.log(mainMessage, secondaryMessage);
         handleSuccessOrError("There was an error...", false, mainMessage, secondaryMessage);
       }
     }, 3000);
