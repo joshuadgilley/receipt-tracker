@@ -92,6 +92,7 @@ export default function Register() {
   const formSubmit = async (e: any) => {
     e.preventDefault();
     const payload = { email, password };
+    console.log(payload);
     setButtonText("...sending");
     let mainMessage = "";
     let secondaryMessage = "";
