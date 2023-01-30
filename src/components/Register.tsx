@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import Success from "./status/Success";
 import ErrorMessage from "./status/ErrorMessage";
+import { formDataToBlob } from "formdata-polyfill/esm.min";
 
 declare var process: {
   env: {
@@ -28,6 +29,8 @@ export default function Register() {
   const [buttonText, setButtonText] = useState("Send Message");
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("That email already exists..");
+  const [errorMessageSecondary, setErrorMessageSecondary] = useState("Please try another one")
 
   const resetForm = () => {
     setEmail("");
@@ -54,24 +57,54 @@ export default function Register() {
     }, 3000);
   };
 
+  const allFieldsAreFilled = () => {
+    return email !== "" && password !== "" && password2 !== "" && terms
+  }
+
+  const handleSuccessOrError = (buttonText: string, success: boolean, mainMessage: string, secondaryMessage: string) => {
+    setButtonText(buttonText);
+    if (success) {
+      throwSuccess();
+    } else {
+      setErrorMessage("Please make sure you've filled out all fields..")
+      setErrorMessageSecondary("Check the terms of service.")
+      throwError();
+    }
+    resetForm();
+  }
+
+  const formDetailsErrorMessage = async () => {
+    let main = "";
+    let secondary = "";
+    if (!allFieldsAreFilled) {
+      main = "Please make sure you've filled out all fields..";
+      secondary = "Check the terms of service"
+    } else if (!checkPasswords(password, password2)) {
+      main = "The passwords do not match..";
+      secondary = "Please retype them"
+    } else if (await emailAlreadyExists(email)) {
+      main = "That email is already in use..";
+      secondary = "Please try another"
+    }
+    return {main, secondary};
+  }
+
   const formSubmit = async (e: any) => {
     e.preventDefault();
     const payload = { email, password };
     setButtonText("...sending");
+    let mainMessage = "";
+    let secondaryMessage = "";
     setTimeout(async () => {
       try {
-        if (!checkPasswords(password, password2)) throw Error;
-        if (await emailAlreadyExists(email)) {
-          throw new Error("That email already exists..");
-        }
-        setButtonText("Sent!");
+        const formDetailsMessage = await formDetailsErrorMessage();
+        mainMessage = formDetailsMessage.main;
+        secondaryMessage = formDetailsMessage.secondary;
+        if (mainMessage === "" && secondaryMessage === "") throw Error;
         await axios.post(process.env.REACT_APP_API_CREATE_USER, payload);
-        throwSuccess();
-        resetForm();
+        handleSuccessOrError("Sent", true, mainMessage, secondaryMessage);
       } catch (error) {
-        console.log(error);
-        throwError();
-        setButtonText("There was an error...");
+        handleSuccessOrError("There was an error...", false, mainMessage, secondaryMessage);
       }
     }, 3000);
   };
@@ -88,8 +121,8 @@ export default function Register() {
       )}
       {error ? (
         <ErrorMessage
-          title={"That email already exists.."}
-          secondary={"Please try another.."}
+          title={errorMessage}
+          secondary={errorMessageSecondary}
         />
       ) : (
         ""
