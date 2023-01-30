@@ -2,7 +2,6 @@ import { useState } from "react";
 import axios from "axios";
 import Success from "./status/Success";
 import ErrorMessage from "./status/ErrorMessage";
-import { formDataToBlob } from "formdata-polyfill/esm.min";
 
 declare var process: {
   env: {
