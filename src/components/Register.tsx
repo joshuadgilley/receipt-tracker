@@ -58,6 +58,7 @@ export default function Register() {
   };
 
   const allFieldsAreFilled = () => {
+    console.log(terms);
     return email !== "" && password !== "" && password2 !== "" && terms
   }
 
@@ -66,8 +67,8 @@ export default function Register() {
     if (success) {
       throwSuccess();
     } else {
-      setErrorMessage("Please make sure you've filled out all fields..")
-      setErrorMessageSecondary("Check the terms of service.")
+      setErrorMessage(mainMessage)
+      setErrorMessageSecondary(secondaryMessage)
       throwError();
     }
     resetForm();
@@ -102,6 +103,8 @@ export default function Register() {
         await axios.post(process.env.REACT_APP_API_CREATE_USER, payload);
         handleSuccessOrError("Sent", true, mainMessage, secondaryMessage);
       } catch (error) {
+        console.log(error);
+        console.log(mainMessage, secondaryMessage);
         handleSuccessOrError("There was an error...", false, mainMessage, secondaryMessage);
       }
     }, 3000);
