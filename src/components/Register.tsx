@@ -86,7 +86,7 @@ export default function Register() {
       main = "That email is already in use..";
       secondary = "Please try another"
     }
-    return {main, secondary};
+    return [main, secondary];
   }
 
   const formSubmit = async (e: any) => {
@@ -97,10 +97,8 @@ export default function Register() {
     let secondaryMessage = "";
     setTimeout(async () => {
       try {
-        const formDetailsMessage = await formDetailsErrorMessage();
-        mainMessage = formDetailsMessage.main;
-        secondaryMessage = formDetailsMessage.secondary;
-        if (mainMessage === "" && secondaryMessage === "") throw Error;
+        [mainMessage, secondaryMessage] = await formDetailsErrorMessage();
+        if (mainMessage !== "" && secondaryMessage !== "") throw Error;
         await axios.post(process.env.REACT_APP_API_CREATE_USER, payload);
         handleSuccessOrError("Sent", true, mainMessage, secondaryMessage);
       } catch (error) {
