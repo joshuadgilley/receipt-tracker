@@ -10,7 +10,7 @@ declare var process: {
 export default async function PricingPage() {
   // from get lambda function connected to api gateway
   const colors = await axios.get(process.env.REACT_APP_API_GET_COLORS);
-  console.log(colors);
+  console.log(colors); // print dropdown
 
   return (
     <section className="bg-white dark:bg-gray-900">
