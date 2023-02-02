@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 const axios = require("axios");
 
 declare var process: {
@@ -7,10 +7,19 @@ declare var process: {
   };
 };
 
-export default async function PricingPage() {
+export default function PricingPage() {
   // from get lambda function connected to api gateway
-  const colors = await axios.get(process.env.REACT_APP_API_GET_COLORS);
-  console.log(colors); // print dropdown
+
+  const [colors, setColors] = useState(undefined);
+  useEffect(() => {
+    (async function () {
+      if (!colors) {
+        const colors = await axios.get(process.env.REACT_APP_API_GET_COLORS);
+        console.log(colors());
+        setColors(colors);
+      }
+    })();
+  }, []);
 
   return (
     <section className="bg-white dark:bg-gray-900">
