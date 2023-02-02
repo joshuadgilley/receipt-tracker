@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import Success from "./status/Success";
 import ErrorMessage from "./status/ErrorMessage";
+import { sha256 } from 'js-sha256';
 
 declare var process: {
   env: {
@@ -19,6 +20,7 @@ export default function Login({ handleSuccess }: CardProps) {
   const [buttonText, setButtonText] = useState("Login");
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
+  const sha = sha256(email + password);
 
   const resetForm = () => {
     setEmail("");
@@ -33,7 +35,7 @@ export default function Login({ handleSuccess }: CardProps) {
     setSuccess(true);
     setTimeout(() => {
       setSuccess(false);
-      handleSuccess(true);
+      handleSuccess(true, sha);
     }, 3000);
   };
 

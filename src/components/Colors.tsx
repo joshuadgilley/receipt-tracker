@@ -18,8 +18,7 @@ interface Color {
   Hex: string;
 }
 
-export default function Colors() {
-
+export default function Colors({sha}: {sha: string}) {
   const [colors, setColors] = useState<ColorListProps>({data: []});
   useEffect(() => {
     (async function () {
@@ -33,7 +32,7 @@ export default function Colors() {
       <div>
         <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Colors!</h1>
         <p className="mb-6 text-lg font-normal text-gray-500 dark:text-gray-400">Please select your favorite color.</p>
-        <Dropdown colors={colors}/>
+        <Dropdown colors={colors} sha={sha}/>
       </div>
     </section>
   );

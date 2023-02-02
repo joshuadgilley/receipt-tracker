@@ -5,7 +5,8 @@ import { ChevronDownIcon } from '@heroicons/react/20/solid'
 interface ColorListProps {
     colors: {
         data: Color[]
-    }
+    },
+    sha: string
 }
 // comment
 interface Color {
@@ -16,7 +17,12 @@ interface Color {
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
-  }
+}
+
+const setColor = (id: number, sha: string) => {
+    console.log(id, sha);
+    // post to colors endpoint that saves users color in mysql rds
+}
 
 export default function Dropdown(props: ColorListProps) {
     const [colors, setColors] = useState<Color[]>([]);
@@ -49,7 +55,7 @@ export default function Dropdown(props: ColorListProps) {
                             return <Menu.Item>
                             {({ active }) => (
                                 <a
-                                    href="#"
+                                    onClick={() => setColor(color.ColorID, props.sha)}
                                     className={classNames(
                                         active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                                         'block px-4 py-2 text-sm'
