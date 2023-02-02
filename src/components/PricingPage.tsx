@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios, { AxiosResponse } from 'axios';
+import Dropdown from "./Dropdown";
 
 declare var process: {
   env: {
@@ -7,22 +8,26 @@ declare var process: {
   };
 };
 
+interface Color {
+  ColorID: number;
+  Color: string;
+  Hex: string;
+}
+
 export default function PricingPage() {
   // from get lambda function connected to api gateway
 
-  const [colors, setColors] = useState<undefined | AxiosResponse>(undefined);
+  const [colors, setColors] = useState<Color[]>([]);
   useEffect(() => {
     (async function () {
-      if (!colors) {
-        const res = await axios.get(process.env.REACT_APP_API_GET_COLORS);
-        console.log(res);
+        const res = await axios.get<Color[], Color[]>(process.env.REACT_APP_API_GET_COLORS);
         setColors(res);
-      }
     })();
   }, []);
 
   return (
     <section className="bg-white dark:bg-gray-900">
+      <Dropdown colors={colors} />
       <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
         <div className="mx-auto max-w-screen-md text-center mb-8 lg:mb-12">
           <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
