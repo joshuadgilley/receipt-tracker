@@ -1,14 +1,16 @@
 import { useEffect, Fragment, useState } from "react";
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import { isPropertySignature } from "typescript";
 
 interface ColorListProps {
     colors: {
         data: Color[]
     },
-    sha: string
+    sha: string,
+    changeBackground: Function
 }
-// comment
+
 interface Color {
     ColorID: number;
     Color: string;
@@ -19,13 +21,15 @@ function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
 
-const setColor = (id: number, sha: string) => {
-    console.log(id, sha);
-    // post to colors endpoint that saves users color in mysql rds
-}
-
 export default function Dropdown(props: ColorListProps) {
     const [colors, setColors] = useState<Color[]>([]);
+
+    const setColor = (color: {ColorID: number, Color: string, Hex: string}, sha: string) => {
+        props.changeBackground(color.Hex)
+        console.log(color.ColorID, sha);
+        // post to colors endpoint that saves users color in mysql rds
+    }
+
     useEffect(() => {
          (async function () {
             setColors(props.colors.data);
@@ -54,15 +58,17 @@ export default function Dropdown(props: ColorListProps) {
                         {colors.map((color: Color, index: number) => {
                             return <Menu.Item>
                             {({ active }) => (
-                                <a
-                                    onClick={() => setColor(color.ColorID, props.sha)}
-                                    className={classNames(
-                                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                        'block px-4 py-2 text-sm'
-                                    )}
-                                >
-                                    {color.Color}
-                                </a>
+                                    <a
+                                        onClick={() => setColor(color, props.sha)}
+                                        className={classNames(
+                                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                            'block px-4 py-2 text-sm'
+                                        )}
+                                        style={{borderLeft: `3px solid${color.Hex}95`, cursor: "pointer"}}
+                                    >
+                                        {color.Color}
+                                    </a>
+                                
                             )}
                         </Menu.Item>;
                         })}
