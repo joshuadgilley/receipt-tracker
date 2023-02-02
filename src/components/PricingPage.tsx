@@ -14,8 +14,9 @@ export default function PricingPage() {
   useEffect(() => {
     (async function () {
       if (!colors) {
-        const colors = await axios.get(process.env.REACT_APP_API_GET_COLORS);
-        setColors(colors);
+        const res = await axios.get(process.env.REACT_APP_API_GET_COLORS);
+        console.log(res);
+        setColors(res);
       }
     })();
   }, []);
