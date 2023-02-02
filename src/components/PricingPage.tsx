@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-const axios = require("axios");
+import axios, { AxiosResponse } from 'axios';
 
 declare var process: {
   env: {
@@ -10,12 +10,11 @@ declare var process: {
 export default function PricingPage() {
   // from get lambda function connected to api gateway
 
-  const [colors, setColors] = useState(undefined);
+  const [colors, setColors] = useState<undefined | AxiosResponse>(undefined);
   useEffect(() => {
     (async function () {
       if (!colors) {
         const colors = await axios.get(process.env.REACT_APP_API_GET_COLORS);
-        console.log(colors());
         setColors(colors);
       }
     })();
